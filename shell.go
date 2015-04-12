@@ -22,6 +22,7 @@ func Warn(a ...interface{}) {
   color.Yellow(arg(a...))
 }
 
+// to stderr
 func Error(a ...interface{}) {
   var msg string
   if len(a) == 1 {
@@ -39,7 +40,7 @@ func Error(a ...interface{}) {
   if os.Getenv("DEBUG") != "" {
     panic(msg)
   } else {
-    color.Red(msg)
+    fmt.Fprintln(os.Stderr, color.RedString(msg))
   }
 }
 
