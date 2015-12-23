@@ -18,8 +18,13 @@ func Say(a ...interface{}) {
   fmt.Print(arg(a...))
 }
 
+// output to stderr
+func Say2(a ...interface{}) {
+  fmt.Fprintf(os.Stderr, arg(a...))
+}
+
 func Warn(a ...interface{}) {
-  color.Yellow(arg(a...))
+  Say2(color.YellowString(arg(a...)))
 }
 
 // to stderr
@@ -40,15 +45,18 @@ func Error(a ...interface{}) {
   if os.Getenv("DEBUG") != "" {
     panic(msg)
   } else {
-    fmt.Fprintln(os.Stderr, color.RedString(msg))
+    Say2(color.RedString(msg))
   }
 }
 
+// with exit 1
 func ErrorExit(a ...interface{}) {
   Error(a...)
   os.Exit(1)
 }
 
 func Debug(a ...interface{}) {
-  Say(a...)
+  if len(os.Getenv("DEBUG")) > 0 {
+    Say2(a...)
+  }
 }
